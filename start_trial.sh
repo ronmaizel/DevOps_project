@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # static vars
-REPO_URL="https://github.com/Ta9/trial_plan.git"
+REPO_URL="https://github.com/ronmaizel/DevOps_project.git"
 PROJECT_DIR="/opt/trial_plan"
 NFS_service_IP="192.168.10.10"
 NFS_REMOTE_PATH="/media"
