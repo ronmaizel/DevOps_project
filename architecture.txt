@@ -1,32 +1,32 @@
-The platform used is docker compose.
+The platform i chose to use is docker compose.
 
-Architecture overview:
-[ User Browser ]
+ARCHITECTURE OVERVIEW:
+User Browser
      |
      v
-[ Nginx Web Server ]
+Nginx Web Server
      |
      v
-[ FastAPI App Server ] <--> [ PostgreSQL Server ]
+FastAPI App Server <--> PostgreSQL Server
      |
      v
-[ NFS Server ] <--------------------------------       
+NFS Server <-----------------------------------       
      ^                                         |
      |                                         v                 
-[ Nginx Web Server ] <---------------> [ FastAPI App Server ]
+Nginx Web Server <---------------> FastAPI App Server
          both mount /media via NFS Docker volume
 
 I chose docker compose because it is a lightweight platform that can be ran on a single server. Environments can be easily brought
 up/down which really fits the playground type project. Additionally, the project can be ran on any type of sandbox (locally, VM, cloud).
 Also, usage of docker volumes makes storing data and using it between containers easier.
 
-Flow explanation:
+FLOW DESCRIPTION:
 User will connect via their browser to the web service (nginx), running on port 80, which acts as a reverse proxy.
 The request will be forwarded to the application service, using Python FastAPI backend, running on port 8080.
 The application service will read/write configuration and text based data from the PostgreSQL service, accessing the db on port 5432, 
 and use shared storage with NFS / Docker volumes to share media between the Web and the App servers.
 
-In depth service explanation:
+IN DEPTH SERVICE EXPLANATION:
 Web service:
      The web service was built with a Dockerfile and a default.conf file with very basic configuration, just to test forwarding to
      the app service. The Dockerfile consists of the nginx:alpine image and a copy command to place the default.conf file inside the
@@ -37,31 +37,35 @@ App service:
 DB service:
      The DB service is only created in Docker compose, so no Dockerfile is used. The postgres:16-alpine image is used, and dummy
      credentials are created for the app service to read and write data to the db. The db_data volume is declared in the docker-compose
-     file for db data persistence. To access it when the container is down or removed, we would need to either access the binaries on
+     file for data persistence. To access it when the container is down or removed, we would need to either access the binaries on
      the host, or just create a new postgres container and mount the db_data docker volume onto the PostgreSQL data directory inside it.
 Shared NFS media:
      In the docker-compose.yml file, the shared_media volume is declared, which consists of the media on the NFS server. Both the web
      and app services access that volume and share its contents.
 
-
+CD:
 Since the project is already on github, it is logical to use github actions for CD. Additionally, You can deploy to remote servers
 via SSH. GHA also supports docker-based workflows, fitting well for this project.
-CD pipeline:
+
+CD PIPELINE:
 Git Push (to main)
        |
        v
 GitHub Actions Workflow Triggered
        |
        v
-Steps:
-  - Checkout the repository
-  - Rebuild Docker images
-  - SSH into host
-  - Pull latest code
-  - Run "docker compose down && docker compose up --build -d"
+Rebuild Docker images
+       |
+       v
+SSH into host
+       |
+       v
+Pull latest code
+       |
+       v
+Run "docker compose down && docker compose up --build -d"
 
-
-Assumptions:
+ASSUMPTIONS:
 - The project files are uploaded onto gitlab, url: https://github.com/ronmaizel/DevOps_project.git
 - The sandbox is ran on a fresh RHEL based system.
 - We have sudo access on the host
