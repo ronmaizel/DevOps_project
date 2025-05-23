@@ -26,5 +26,5 @@
 8. Perform health check for all containers:
     app service accessible and shows code 200 at localhost:8080 (check by running curl at localhost:8080)
     web service accessible and shows code 200 at localhost (check by running curl at localhost)
-    db service accepting connections (check by running db_isready inside container)
+    db service accepting connections (check by switching to Postgres user and running db_isready inside container)
 
