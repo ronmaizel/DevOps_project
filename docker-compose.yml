@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./web
+    container_name: web
+    ports:
+      - "80:80"
+    volumes:
+      - shared_media:/media
+    depends_on:
+      - app
+
+  app:
+    build: ./app
+    container_name: app
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:Aa123456@db:5432/postgres
+    depends_on:
+      - db
+    volumes:
+      - shared_media:/media
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Aa123456
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  shared_media:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.10.10,nolock,soft,rw"
+      device: ":/media"
+  db_data:

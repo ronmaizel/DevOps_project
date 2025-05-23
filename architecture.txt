@@ -1,0 +1,37 @@
+Architecture overview:
+
+[ User Browser ]
+     |
+     v
+[ Nginx Web Server ]
+     |
+     v
+[ FastAPI App Server ] <--> [ PostgreSQL Server ]
+     |
+     v
+[ NFS Server ] <--------------------------------       
+     ^                                         |
+     |                                         v                 
+[ Nginx Web Server ] <---------------> [ FastAPI App Server ]
+         both mount /media via NFS Docker volume
+
+Flow explanation:
+The platform used is docker compose.
+User will connect via their browser to the web service (nginx), running on port 80, which acts as a reverse proxy.
+The request will be forwarded to the application service, using Python FastAPI backend, running on port 8080.
+The application service will read/write configuration and text based data from the PostgreSQL service, accessing the db on port 5432, 
+and use shared storage with NFS / Docker volumes to share media between the Web and the App servers.
+
+
+I chose docker compose because it is a lightweight platform that can be ran on a single server. Environments can be easily brought
+up/down which really fits the playground type project. Additionally, the project can be ran on any type of sandbox (locally, VM, cloud).
+Also, usage of docker volumes makes storing data between containers easier.
+
+# explain more
+For continuous integration I chose github actions. You can deploy to remote servers via SSH.
+
+
+Assumptions:
+- The project files are uploaded onto gitlab, url: https://github.com/Ta9/trial_plan.git
+- The sandbox is ran on a fresh RHEL based system.
+- NFS server exists and is configured. Media is mounted on /media. IP is 192.168.10.10

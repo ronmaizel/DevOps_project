@@ -1,0 +1,23 @@
+1. Ready the host with the following specs:
+    Memory: 2GB minimum, 4GB recommended
+    CPU: 2 cores minimum
+    Linux OS
+    Internet accsess
+
+2. Install required software (curl, docker, docker compose, extra packages)
+
+3. Open ports on host's firewall:
+    80 (http traffic)
+    5342 (PostgreSQL remote access)
+    2049 (NFS data sharing)
+    8080 (App server port)
+
+4. Clone the files from git repository onto the vm
+
+5. mount NFS share on local host, add entry to /etc/fstab for persistence
+
+6. Build from docker-compose.yml and start services in this order:
+    db service, then app service, and lastly the web service.
+
+7. Perform health check for all containers
+
