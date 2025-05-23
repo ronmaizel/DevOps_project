@@ -4,7 +4,7 @@
     Linux OS
     Internet access
 
-2. Curl get-docker script to install docker, then install the required packages:
+2. Curl get-docker script from official docker site to install docker, then install the required packages:
     curl, docker-compose-plugin, python3, python3-pip, git, nfs-common
 
 3. Add current user to the docker group
@@ -20,7 +20,7 @@
 
 6. mount NFS share on local host, add entry to /etc/fstab for persistence
 
-7. Build from docker-compose.yml and start services in this order:
+7. Build with docker-compose.yml and start services in this order:
     db service, then app service, and lastly the web service.
 
 8. Perform health check for all containers:
