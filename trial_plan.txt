@@ -2,22 +2,29 @@
     Memory: 2GB minimum, 4GB recommended
     CPU: 2 cores minimum
     Linux OS
-    Internet accsess
+    Internet access
 
-2. Install required software (curl, docker, docker compose, extra packages)
+2. Curl get-docker script to install docker, then install the required packages:
+    curl, docker-compose-plugin, python3, python3-pip, git, nfs-common
 
-3. Open ports on host's firewall:
+3. Add current user to the docker group
+    this needs to be done for permission reasons, otherwise user won't be able to run docker commands
+
+4. Open ports on host's firewall:
     80 (http traffic)
     5342 (PostgreSQL remote access)
     2049 (NFS data sharing)
     8080 (App server port)
 
-4. Clone the files from git repository onto the vm
+5. Clone the files from git repository onto the vm
 
-5. mount NFS share on local host, add entry to /etc/fstab for persistence
+6. mount NFS share on local host, add entry to /etc/fstab for persistence
 
-6. Build from docker-compose.yml and start services in this order:
+7. Build from docker-compose.yml and start services in this order:
     db service, then app service, and lastly the web service.
 
-7. Perform health check for all containers
+8. Perform health check for all containers:
+    app service accessible and shows code 200 at localhost:8080 (check by running curl at localhost:8080)
+    web service accessible and shows code 200 at localhost (check by running curl at localhost)
+    db service accepting connections (check by running db_isready inside container)
 

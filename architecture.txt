@@ -44,11 +44,25 @@ Shared NFS media:
      and app services access that volume and share its contents.
 
 
-# explain more
-For continuous integration I chose github actions. You can deploy to remote servers via SSH.
+Since the project is already on github, it is logical to use github actions for CD. Additionally, You can deploy to remote servers
+via SSH. GHA also supports docker-based workflows, fitting well for this project.
+CD pipeline:
+Git Push (to main)
+       |
+       v
+GitHub Actions Workflow Triggered
+       |
+       v
+Steps:
+  - Checkout the repository
+  - Rebuild Docker images
+  - SSH into host
+  - Pull latest code
+  - Run "docker compose down && docker compose up --build -d"
 
 
 Assumptions:
 - The project files are uploaded onto gitlab, url: https://github.com/ronmaizel/DevOps_project.git
 - The sandbox is ran on a fresh RHEL based system.
+- We have sudo access on the host
 - NFS server exists and is configured. Media is mounted on /media. IP is 192.168.10.10
