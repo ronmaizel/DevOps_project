@@ -1,6 +1,6 @@
 The platform i chose to use is docker compose.
 
-ARCHITECTURE OVERVIEW:
+ARCHITECTURE DIAGRAM:
 User Browser
      |
      v

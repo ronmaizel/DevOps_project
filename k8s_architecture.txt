@@ -1,0 +1,32 @@
+K8S architecture would be scalable, self-healing and redundant.
+High availability is achieved by replicating web, app, and database containers. Patroni handles DB leader failover automatically.
+Of course, if the master node fails, all services will jump to one of the worker nodes, meaning also node high availability is achieved.
+
+K8S ARCHITECTURE DIAGRAM:
+User Browser
+      |
+      v
+Ingress Controller x2
+      |
+      v
+Web Pods x2  <------->  Persistent Volume: /media
+      |                     ^
+      |                     |
+      v                     v
+App Service ------->  App Pods x2
+      |
+      v
+Patroni Cluster x3
+
+The flow is exactly the same, only now every service has a DR service if it happens to fail.
+We would have deployments for every service: A web deployment, an app deployment, and a Patroni deployment. There will also be 2
+services: A LoadBalancer type service, and an internal app service.
+
+IN DEPTH DEPLOYMENT AND SERVICE EXPLANATION:
+The ingress controller deployemnt would consist of 2 replicas, fronted by a LoadBalacer type service. If one ingress pod fails,
+traffic is routed to another pod. The external load balancer handles balancing traffic to the healthy ingress pods.
+The web deployment will consist of 2 web replicas, traffic from the ingress is routed via a ClusterIP service to any available web pod.
+The app deployemnt will consist of 2 app replicas. Requests incoming from the web deployment will be balanced between both pods,
+and failed pods are restarted automatically by Kubernetes.
+The Patroni deployment will consist of 3 replicas - a primary and 2 slaves. Patroni monitors the pods' health and promotes a slave
+if the primary fails.
