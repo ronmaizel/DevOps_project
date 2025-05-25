@@ -69,4 +69,4 @@ ASSUMPTIONS:
 - The project files are uploaded onto gitlab, url: https://github.com/ronmaizel/DevOps_project.git
 - The sandbox is ran on a fresh RHEL based system.
 - We have sudo access on the host
-- NFS server exists and is configured. Media is mounted on /media. IP is 192.168.10.10
+- NFS server exists and is already configured. Media is mounted on /media. IP is 192.168.10.10
