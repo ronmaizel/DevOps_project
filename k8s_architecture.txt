@@ -30,3 +30,11 @@ The app deployemnt will consist of 2 app replicas. Requests incoming from the we
 and failed pods are restarted automatically by Kubernetes.
 The Patroni deployment will consist of 3 replicas - a primary and 2 slaves. Patroni monitors the pods' health and promotes a slave
 if the primary fails.
+
+MULTI-REGION:
+For an even more disaster-resistent application , we could design a multi-region architecture:
+There would be 2 different regions with an independent K8S cluster in each one. A global LB would be needed to route traffic to clusters
+in different regions. The patroni clusters would be replicated between regions, with the primary region being where the primary db
+deployment is. The db data will be replicated to the second region via patroni WALS, where the second region db deployment will be in
+read-only mode. In case of failover, the other region will be promoted and traffic will be rerouted to the new primary region.
+Each cluster would be built exactly the same as i described earlier.     
