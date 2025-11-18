@@ -9,6 +9,9 @@ NFS_MOUNT_PATH="/media"
 APP_PORT=8080
 WEB_PORT=80
 
+# announce start
+echo "Starting trial plan build."
+
 # install packages
 echo "Installing necessary packages."
 dnf -y install curl
