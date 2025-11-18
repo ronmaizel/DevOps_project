@@ -38,7 +38,7 @@ volumes:
   shared_media:
     driver: local
     driver_opts:
-      type: "nfs"
-      o: "addr=192.168.10.10,nolock,soft,rw"
-      device: ":/media"
+      type: none
+      o: bind
+      device: C:\Users\Ronmz\OneDrive\Desktop\Ron\DevOps\Docker Compose Project
   db_data:
